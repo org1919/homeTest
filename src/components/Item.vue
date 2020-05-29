@@ -1,58 +1,89 @@
 <template>
-  <li class="list-group-item">
-    <div class="handle">
-      <a href="javascript:;" @click="deleteC">删除</a>
-    </div>
-    <p class="user">
-      <span>{{comment.username}}</span>
-      <span>说:</span>
-    </p>
-    <p class="centence">{{comment.text}}</p>
+  <li :class="myClass" @mouseenter="handlerItem(true)" @mouseleave="handlerItem(false)">
+    <label>
+      <input type="checkbox" v-model="isChecked" />
+      <span>{{todo.content}}</span>
+    </label>
+    <button class="btn btn-danger" v-show="isShow" @click="deleteT">删除</button>
   </li>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-  props: ["comment", "index", "deleteComments"],
+  props: {
+    todo: Object,
+    index: Number,
+    updateOne: Function,
+    deleteTodo: Function
+  },
   data() {
     return {
-      msg: "aa"
+      isShow: false,
+      myClass: "leaveItem"
     };
   },
+  computed: {
+    isChecked: {
+      get() {
+        return this.todo.isOver;
+      },
+      set(val) {
+        this.updateOne(this.index, val);
+      }
+    }
+  },
   methods: {
-    deleteC() {
-      this.deleteComments(this.index);
+    handlerItem(flag) {
+      flag ? (this.myClass = "enterItem") : (this.myClass = "leaveItem");
+      this.isShow = !this.isShow;
+    },
+    deleteT() {
+      this.deleteTodo(this.index);
     }
   }
 };
 </script>
 
 <style scoped>
+/*item*/
 li {
-  transition: 0.5s;
-  overflow: hidden;
+  list-style: none;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 5px;
+  border-bottom: 1px solid #ddd;
 }
 
-.handle {
-  width: 40px;
-  border: 1px solid #ccc;
-  background: #fff;
-  position: absolute;
-  right: 10px;
-  top: 1px;
-  text-align: center;
+li label {
+  float: left;
+  cursor: pointer;
 }
 
-.handle a {
-  display: block;
-  text-decoration: none;
+li label li input {
+  vertical-align: middle;
+  margin-right: 6px;
+  position: relative;
+  top: -1px;
 }
 
-.list-group-item .centence {
-  padding: 0px 50px;
+li button {
+  float: right;
+  /* display: none; */
+  margin-top: 3px;
 }
 
-.user {
-  font-size: 22px;
+li:before {
+  content: initial;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.enterItem {
+  background: #ddd;
+}
+.leaveItem {
+  background: #ffffff;
 }
 </style>

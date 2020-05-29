@@ -1,53 +1,72 @@
 <template>
-  <div>
-    <header class="site-header jumbotron">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12">
-            <h1>请发表对Vue的评论</h1>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="container">
-      <!-- <Add :addComments="addComments" /> -->
-      <Add ref="add" />
-      <!-- <Add @addComments="addComments" /> -->
-      <List :comments="comments" :deleteComments="deleteComments" />
+  <div class="todo-container">
+    <div class="todo-wrap">
+      <Header :addTodo="addTodo" />
+      <Main :todos="todos" :updateOne="updateOne" :deleteTodo="deleteTodo" />
+      <!-- <Footer :todos="todos" :updataAllT="updataAllT" :deleteAllT="deleteAllT" /> -->
+      <Footer :todos="todos" :updataAllT="updataAllT" />
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import Add from "@/components/Add";
-import List from "@/components/List";
+import Header from "./components/Header";
+import Main from "./components/Main";
+import Footer from "./components/Footer";
 export default {
-  components: {
-    Add,
-    List
-  },
-  mounted() {
-    this.$refs.add.$on("addComments", this.addComments);
-  },
   data() {
     return {
-      comments: [
-        { id: 1, username: "张三", text: "vue挺好的" },
-        { id: 2, username: "李四", text: "vue不错的呦" },
-        { id: 3, username: "王五", text: "vue太棒了" }
-      ]
+      todos: JSON.parse(localStorage.getItem("todos_keys")) || []
     };
   },
+  mounted() {
+    this.$bus.$on("deleteAllT", this.deleteAllT);
+  },
+  components: {
+    Header,
+    Main,
+    Footer
+  },
   methods: {
-    addComments(obj) {
-      this.comments.unshift(obj);
+    addTodo(obj) {
+      this.todos.unshift(obj);
     },
-    deleteComments(index) {
-      this.comments.splice(index, 1);
+    updateOne(index, val) {
+      this.todos[index].isOver = val;
+    },
+    deleteTodo(index) {
+      this.todos.splice(index, 1);
+    },
+    updataAllT(val) {
+      this.todos.forEach(item => (item.isOver = val));
+    },
+    deleteAllT() {
+      this.todos = this.todos.filter(item => item.isOver === false);
+    }
+  },
+  watch: {
+    // todos(newVal, oldVal) {
+    //   localStorage.setItem("todos_keys", JSON.stringify(newVal));
+    // }
+    todos: {
+      deep: true,
+      handler(newVal, oldVal) {
+        localStorage.setItem("todos_keys", JSON.stringify(newVal));
+      }
     }
   }
 };
 </script>
 
 <style scoped>
+/*app*/
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
 </style>

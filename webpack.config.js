@@ -76,19 +76,26 @@ module.exports = {
     mode: 'development',//配置启动模式，开发模式还是生产模式
 
     devServer: {
-        port: 8080,//服务启动的端口
+        port: 8000,//服务启动的端口
         open: true,//是否自动打开浏览器
         quiet: true,//输出少量的提示信息
     },
 
     devtool: 'cheap-module-eval-source-map',//定位出错所在的原始代码行
 
+    // resolve: {
+    //     extensions: [".js", ".json", ".vue"], //解决导入省略后缀名称
+    //     alias: {
+    //         'vue$': 'vue/dist/vue.esm.js',
+    //         '@': path.resolve(__dirname, 'src')
+    //     }
+    // }
+
     resolve: {
-        extensions: [".js", ".json", ".vue"], //解决导入省略后缀名称
+        extensions: [".js", ".json", '.vue'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
-            '@': path.resolve(__dirname, 'src')
+            "@": path.resolve(__dirname, 'src')
         }
     }
-
-};
+}

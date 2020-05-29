@@ -1,12 +1,10 @@
 import Vue from 'vue'
-import App from './App.vue'
-Vue.config.productionTip = false
-new Vue({
-    el: '#root',
-    // render: h => h(App)
+import App from '@/App'
 
-    components: {
-        App
+new Vue({
+    beforeCreate() {
+        Vue.prototype.$bus = new Vue();
     },
-    template: '<App/>'
+    el: '#root',
+    render: h => h(App),
 })
