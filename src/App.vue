@@ -1,28 +1,23 @@
 <template>
-<div>
-    <MyBlog v-for="blog in blogs" :key="blog.id" :title="blog.title"></MyBlog>
-</div>
+  <div class="container">
+    <Search />
+    <Main />
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-import MyBlog from './components/MyBlog'
+import Search from "./components/Search";
+import Main from "./components/Main";
 export default {
-    components:{
-        MyBlog
-    },
-    data(){
-        return {
-            blogs:[
-                {id:1,title:'blogOne'},
-                {id:2,title:'blogTwo'},
-                {id:3,title:'blogThree'},
-            ]
-        }
-    }
-}
+  data() {
+    return {};
+  },
+  components: {
+    Search,
+    Main
+  }
+};
 </script>
 
 <style scoped>
-
-
 </style>
