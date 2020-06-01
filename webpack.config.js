@@ -25,8 +25,18 @@ module.exports = {
                     //babel/preset-env包含了一系列的ES6语法解析的插件,每个插件对应一个ES6语法
                     //babel-loader它就是依靠这些插件去解析的
                     options: {
-                        presets: ['@babel/preset-env']
-                    }
+                        presets: ['@babel/preset-env'],
+                        "plugins": [
+                            [
+                                "component",
+                                {
+                                    "libraryName": "element-ui",
+                                    "styleLibraryName": "theme-chalk"
+                                }
+                            ]
+                        ]
+                    },
+
                 }
             },
             //打包CSS vue-style-loader是style-loader的一个增强版本
@@ -52,6 +62,11 @@ module.exports = {
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
+            },
+
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+                loader: 'file-loader'
             }
         ]
     },
@@ -79,6 +94,23 @@ module.exports = {
         port: 8000,//服务启动的端口
         open: true,//是否自动打开浏览器
         quiet: true,//输出少量的提示信息
+        // proxy: {
+        //     '/api': {//这个/api其实是告诉代理,以后什么样的请求，需要给我代理转发
+        //         target: 'https://localhost:4000',
+        //         //转发的目标地址不需要路径,因为转发的时候会把发送请求的路径默认频道目标后面
+        //         pathRewrite: { '^/api': '' },
+        //         //真正的目标地址应该是http://localhost:4000/users/info
+        //         //这一行在干的活就是把/api去掉
+        //         changeOrigin: true
+        //     }
+        // }
+        proxy: {
+            "/api": {
+                target: "http://localhost:4000",
+                pathRewrite: { "^/api": "" },
+                changeOrigin: true
+            }
+        }
     },
 
     devtool: 'cheap-module-eval-source-map',//定位出错所在的原始代码行

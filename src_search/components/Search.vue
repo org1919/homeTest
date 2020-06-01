@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     search() {
-      this.$store.dispatch("search", this.content);
+      this.$bus.$emit("searchFor", this.content);
     }
   }
 };

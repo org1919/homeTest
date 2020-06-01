@@ -13,51 +13,56 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import axios from "axios";
-// import Vue from "vue";
-// import VueResource from "vue-resource";
-// Vue.use(VueResource);
-
-import { mapGetters } from "vuex";
+import axios from "axios";
+import Vue from "vue";
+import VueResource from "vue-resource";
+Vue.use(VueResource);
 export default {
   data() {
-    return {};
+    return {
+      isFirt: true,
+      isLoading: false,
+      errMsg: "",
+      users: []
+    };
   },
-  // computed: {
-  //   ...mapGetters(["isLoading", "isFirt", "errMsg", "users"])
-  // },
-  computed: mapGetters(["isLoading", "isFirt", "errMsg", "users"]),
+  mounted() {
+    this.$bus.$on("searchFor", this.searchFor);
+  },
   methods: {
-    // async searchFor(content) {
-    //   this.isFirt = false;
-    //   this.isLoading = true;
-    //   try {
-    //     let response = await this.$http({
-    //       method: "GET",
-    //       url: "https://api.github.com/search/users",
-    //       params: {
-    //         q: content
-    //       }
-    //     });
-    //     this.isLoading = false;
-    //     // console.log(response.data.items);
-    //     console.log(response.data);
-    //     response.data.items.forEach(item => {
-    //       let user_name = item.login;
-    //       let user_img = item.avatar_url;
-    //       let user_url = item.url;
-    //       let obj = {
-    //         user_name,
-    //         user_img,
-    //         user_url
-    //       };
-    //       this.users.push(obj);
-    //     });
-    //   } catch (error) {
-    //     this.errMsg = error.message;
-    //     this.isLoading = false;
-    //   }
-    // }
+    async searchFor(content) {
+      this.isFirt = false;
+      this.isLoading = true;
+
+      try {
+        let response = await this.$http({
+          method: "GET",
+          url: "http://localhost:8000/api/user",
+          params: {
+            q: content
+          }
+        });
+        this.isLoading = false;
+        // console.log(response.data.items);
+        console.log(response.data);
+
+        response.data.items.forEach(item => {
+          let user_name = item.login;
+          let user_img = item.avatar_url;
+          let user_url = item.url;
+          let obj = {
+            user_name,
+            user_img,
+            user_url
+          };
+          this.users.push(obj);
+        });
+      } catch (error) {
+        this.errMsg = error.message;
+        this.isLoading = false;
+      }
+    }
+
     //1---------------------------------------------------------
     // searchFor(content) {
     //   this.isFirt = false;
@@ -89,6 +94,7 @@ export default {
     //       this.isLoading = false;
     //     });
     // }
+
     //2-------------------------------------------------------
     // searchFor(content) {
     //   this.isFirt = false;
