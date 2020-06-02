@@ -9,7 +9,8 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, 'dist'),//打包完成后的文件放在哪，dist文件夹会自动创建好
-        filename: 'main.js'
+        filename: 'main.js',
+        publicPath: '/'
     },
 
     //配置各种loader
@@ -110,7 +111,8 @@ module.exports = {
                 pathRewrite: { "^/api": "" },
                 changeOrigin: true
             }
-        }
+        },
+        historyApiFallback: true,
     },
 
     devtool: 'cheap-module-eval-source-map',//定位出错所在的原始代码行

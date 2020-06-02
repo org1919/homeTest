@@ -1,12 +1,9 @@
-import Vue from "vue"
-import App from "@/App"
-import "@babel/polyfill";
-import store from './vuex/store'
+import Vue from 'vue'
+import App from '@/App'
+import router from '@/router/index'
 new Vue({
-    beforeCreate() {
-        Vue.prototype.$bus = this
-    },
     el: '#root',
     render: h => h(App),
-    store
+    router //this.$router 代表的是路由器对象
+    //this.$route 代表的是当前的路由对象
 })
